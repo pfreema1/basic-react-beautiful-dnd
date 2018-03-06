@@ -6,7 +6,8 @@ const styling = {
   alignItems: "center",
   position: "absolute",
   top: "0",
-  width: "100vw"
+  width: "100vw",
+  height: "100px"
 };
 
 const CardWrapperView = props => {

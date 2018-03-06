@@ -6,6 +6,7 @@ import Card from "./Containers/Card";
 import { Provider } from "react-redux";
 import DroppingArea from "./Containers/DroppingArea";
 import CardWrapperView from "./Components/CardWrapperView";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const initialState = {
   cards: [],
@@ -24,6 +25,21 @@ const createCards = () => {
     initialState.cards.push(tempCard);
   }
 };
+
+/******************
+ *  styling functions
+ */
+
+/********************* */
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // change background colour if dragging
+  background: isDragging ? "lightgreen" : "grey",
+
+  // styles we need to apply on draggables
+  ...draggableStyle
+});
+
+/********************* */
 
 createCards();
 
@@ -75,20 +91,70 @@ let store = createStore(reducer);
 store.subscribe(() => console.log(store.getState()));
 
 class App extends Component {
+  /******************
+   *  drag and drop methods
+   *******************/
+  onDragStart = start => {
+    console.log("onDragStart runnning");
+  };
+
+  onDragUpdate = update => {
+    console.log("onDragUpdate running");
+  };
+
+  onDragEnd = result => {
+    console.log("onDragEnd running");
+  };
+
+  /********************* */
   render() {
     const cards = store.getState().cards;
     return (
       <Provider store={store}>
-        <div>
-          <TableView>
-            <DroppingArea />
-          </TableView>
-          <CardWrapperView>
-            {cards.map((card, index) => {
-              return <Card key={index} cardIndex={index} />;
-            })}
-          </CardWrapperView>
-        </div>
+        <DragDropContext
+          onDragStart={this.onDragStart}
+          onDragUpdate={this.onDragUpdate}
+          onDragEnd={this.onDragEnd}
+        >
+          <div>
+            <TableView>
+              <DroppingArea />
+            </TableView>
+            <Droppable droppableId="droppable" direction="horizontal">
+              {(provided, snapshot) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <CardWrapperView>
+                    {cards.map((card, index) => (
+                      <Draggable
+                        key={card.name}
+                        draggableId={card.name}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div>
+                            <Card
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              key={index}
+                              cardIndex={index}
+                              draggableStyle={getItemStyle(
+                                snapshot.isDragging,
+                                provided.draggableProps.style
+                              )}
+                            />
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </CardWrapperView>
+                </div>
+              )}
+            </Droppable>
+          </div>
+        </DragDropContext>
       </Provider>
     );
   }
