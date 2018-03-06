@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import DroppingArea from './Containers/DroppingArea';
 import CardWrapperView from './Components/CardWrapperView';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import CardSelectorDroppable from './Components/CardSelectorDroppable';
 
 const initialState = {
   cards: [],
@@ -33,26 +34,6 @@ const reorder = (list, startIndex, endIndex) => {
 
   return result;
 };
-
-/******************
- *  styling functions
- */
-
-/********************* */
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // change background colour if dragging
-  background: isDragging ? 'lightgreen' : 'grey',
-
-  // styles we need to apply on draggables
-  ...draggableStyle
-});
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  display: 'flex',
-  padding: '8px',
-  overflow: 'auto'
-});
 
 /********************* */
 
@@ -134,42 +115,7 @@ class App extends Component {
             <TableView>
               <DroppingArea />
             </TableView>
-
-            <Droppable droppableId="droppable" direction="horizontal">
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  style={getListStyle(snapshot.isDraggingOver)}
-                  {...provided.droppableProps}
-                >
-                  {cards.map((card, index) => (
-                    <Draggable
-                      key={card.name}
-                      draggableId={card.name}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div>
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getItemStyle(
-                              snapshot.isDragging,
-                              provided.draggableProps.style
-                            )}
-                          >
-                            <Card key={index} cardIndex={index} />
-                          </div>
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+            <CardSelectorDroppable cards={cards} />
           </div>
         </DragDropContext>
       </Provider>

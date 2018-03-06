@@ -15,6 +15,10 @@ const styling = {
   border: '1px solid skyblue'
 };
 
-const CardView = ({ name }) => <div style={{ ...styling }}>name: {name}</div>;
+const CardView = ({ name, isDragging }) => (
+  <div style={{ ...styling, background: isDragging ? 'lightblue' : 'grey' }}>
+    name: {name}
+  </div>
+);
 
 export default CardView;

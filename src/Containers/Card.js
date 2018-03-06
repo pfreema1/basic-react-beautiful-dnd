@@ -4,12 +4,13 @@ import CardView from '../Components/CardView';
 
 class Card extends React.Component {
   render() {
-    let { cardIndex, cards, draggableStyle } = this.props;
+    let { cardIndex, cards, draggableStyle, isDragging } = this.props;
 
     return (
       <CardView
         name={cards[cardIndex].name}
         timesDropped={cards[cardIndex].timesDropped}
+        isDragging={isDragging}
       />
     );
   }
