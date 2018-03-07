@@ -56,7 +56,7 @@ const reducer = (state = initialState, action) => {
       //   cards: newCardsArr
       // };
     }
-    case 'DROPPED_ON_BUILDER': {
+    case 'CARD_DROPPED_ON_BUILDER': {
       const { result } = action;
       //create copy of the card
       const cardCopy = {
@@ -64,6 +64,20 @@ const reducer = (state = initialState, action) => {
       };
 
       const newDroppedCardsArr = state.droppedCards.concat(cardCopy);
+
+      return {
+        ...state,
+        droppedCards: newDroppedCardsArr
+      };
+    }
+    case 'BUILDER_CARD_DROPPED_ON_BUILDER': {
+      //sort dropped cards
+      const { result } = action;
+      const startIndex = result.source.index;
+      const endIndex = result.destination.index;
+      const newDroppedCardsArr = [...state.droppedCards];
+      const removed = newDroppedCardsArr.splice(startIndex, 1);
+      newDroppedCardsArr.splice(endIndex, 0, ...removed);
 
       return {
         ...state,
@@ -101,7 +115,13 @@ class App extends Component {
 
     //if destination was builderDroppable
     if (result.destination.droppableId === 'builderDroppable') {
-      store.dispatch({ type: 'DROPPED_ON_BUILDER', result });
+      //if this dragEnd is running on a builderCard
+      if (result.draggableId.indexOf('-builderCard') !== -1) {
+        store.dispatch({ type: 'BUILDER_CARD_DROPPED_ON_BUILDER', result });
+      } else {
+        //dragEnd is running on a normal card
+        store.dispatch({ type: 'CARD_DROPPED_ON_BUILDER', result });
+      }
     }
   };
 
