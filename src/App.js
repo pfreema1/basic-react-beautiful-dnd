@@ -63,7 +63,10 @@ const reducer = (state = initialState, action) => {
         ...state.cards.find(card => card.name === result.draggableId)
       };
 
-      const newDroppedCardsArr = state.droppedCards.concat(cardCopy);
+      const endIndex = result.destination.index;
+
+      const newDroppedCardsArr = [...state.droppedCards];
+      newDroppedCardsArr.splice(endIndex, 0, cardCopy);
 
       return {
         ...state,
