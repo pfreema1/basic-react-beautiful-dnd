@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import { createStore } from 'redux';
-import TableView from './Components/TableView';
-import Card from './Containers/Card';
 import { Provider } from 'react-redux';
-import DroppingArea from './Containers/DroppingArea';
 import CardWrapperView from './Components/CardWrapperView';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import CardSelectorDroppable from './Components/CardSelectorDroppable';
+import BlockBuilder from './Components/BlockBuilder';
+import TableView from './Components/TableView';
 
 const initialState = {
   cards: [],
@@ -46,27 +45,29 @@ createCards();
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'DRAG_ENDED': {
+      // const { result } = action;
+      // const startIndex = result.source.index;
+      // const endIndex = result.destination.index;
+      // const newCardsArr = [...state.cards];
+      // const removed = newCardsArr.splice(startIndex, 1);
+      // newCardsArr.splice(endIndex, 0, ...removed);
+      // return {
+      //   ...state,
+      //   cards: newCardsArr
+      // };
+    }
+    case 'DROPPED_ON_BUILDER': {
       const { result } = action;
+      //create copy of the card
+      const cardCopy = {
+        ...state.cards.find(card => card.name === result.draggableId)
+      };
 
-      //index of where the dropped card started
-      // result.source.index
-
-      //index of where the dropped card ended up
-      // result.destination.index
-
-      //id of card being dragged
-      // result.draggableId
-
-      const startIndex = result.source.index;
-      const endIndex = result.destination.index;
-
-      const newCardsArr = [...state.cards];
-      const removed = newCardsArr.splice(startIndex, 1);
-      newCardsArr.splice(endIndex, 0, ...removed);
+      const newDroppedCardsArr = state.droppedCards.concat(cardCopy);
 
       return {
         ...state,
-        cards: newCardsArr
+        droppedCards: newDroppedCardsArr
       };
     }
     default:
@@ -98,12 +99,18 @@ class App extends Component {
       return;
     }
 
-    store.dispatch({ type: 'DRAG_ENDED', result });
+    //if destination was builderDroppable
+    if (result.destination.droppableId === 'builderDroppable') {
+      store.dispatch({ type: 'DROPPED_ON_BUILDER', result });
+    }
   };
 
   /********************* */
   render() {
-    const cards = store.getState().cards;
+    const state = store.getState();
+    const cards = state.cards;
+    const droppedCards = state.droppedCards;
+
     return (
       <Provider store={store}>
         <DragDropContext
@@ -113,7 +120,7 @@ class App extends Component {
         >
           <div>
             <TableView>
-              <DroppingArea />
+              <BlockBuilder droppedCards={droppedCards} />
             </TableView>
             <CardSelectorDroppable cards={cards} />
           </div>

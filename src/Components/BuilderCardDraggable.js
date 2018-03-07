@@ -10,7 +10,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle
 });
 
-const CardDraggable = ({ card, index }) => {
+const BuilderCardDraggable = ({ card, index }) => {
   return (
     <Draggable key={card.name} draggableId={card.name} index={index}>
       {(provided, snapshot) => (
@@ -38,4 +38,4 @@ const CardDraggable = ({ card, index }) => {
   );
 };
 
-export default CardDraggable;
+export default BuilderCardDraggable;

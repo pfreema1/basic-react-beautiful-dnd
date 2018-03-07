@@ -14,7 +14,11 @@ const getListStyle = isDraggingOver => ({
 
 const CardSelectorDroppable = ({ cards }) => {
   return (
-    <Droppable droppableId="droppable" direction="horizontal">
+    <Droppable
+      isDropDisabled="true" //can't be dropped on but has draggables
+      droppableId="droppable"
+      direction="horizontal"
+    >
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
@@ -22,7 +26,7 @@ const CardSelectorDroppable = ({ cards }) => {
           {...provided.droppableProps}
         >
           {cards.map((card, index) => (
-            <CardDraggable card={card} index={index} />
+            <CardDraggable key={index} card={card} index={index} />
           ))}
           {provided.placeholder}
         </div>

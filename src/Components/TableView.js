@@ -1,5 +1,6 @@
 import React from 'react';
 import ColorPalette from '../ColorPalette';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const styling = {
   width: '100vw',
