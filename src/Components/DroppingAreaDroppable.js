@@ -1,6 +1,6 @@
 import React from 'react';
 import ColorPalette from '../ColorPalette';
-import BuilderCardDraggable from './CardDraggable';
+import BuilderCardDraggable from './BuilderCardDraggable';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const styling = {

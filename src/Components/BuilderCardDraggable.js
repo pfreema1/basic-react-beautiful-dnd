@@ -12,7 +12,11 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 
 const BuilderCardDraggable = ({ card, index }) => {
   return (
-    <Draggable key={card.name} draggableId={card.name} index={index}>
+    <Draggable
+      key={card.name}
+      draggableId={card.name + '-builderCard'}
+      index={index}
+    >
       {(provided, snapshot) => (
         <div>
           <div
