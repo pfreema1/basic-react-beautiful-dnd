@@ -44,18 +44,6 @@ createCards();
  *****************/
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'DRAG_ENDED': {
-      // const { result } = action;
-      // const startIndex = result.source.index;
-      // const endIndex = result.destination.index;
-      // const newCardsArr = [...state.cards];
-      // const removed = newCardsArr.splice(startIndex, 1);
-      // newCardsArr.splice(endIndex, 0, ...removed);
-      // return {
-      //   ...state,
-      //   cards: newCardsArr
-      // };
-    }
     case 'CARD_DROPPED_ON_BUILDER': {
       const { result } = action;
       //create copy of the card
